@@ -25,7 +25,7 @@ public class UrlShortenerApplication {
 	@Bean
 	public Bucket bucket() {
 		return Bucket.builder()
-				.addLimit(Bandwidth.classic(1, Refill.greedy(1, Duration.ofMinutes(1))))
+				.addLimit(Bandwidth.classic(100, Refill.greedy(100, Duration.ofMinutes(1))))
 				.build();
 	}
 }
