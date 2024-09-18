@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,7 @@ import static ru.silent_boy.UrlShortener.util.ErrorsUtil.returnErrorsMessage;
 
 @Slf4j
 @RestController
-public class UrlController {
+public class UrlController implements IUrlController {
     @Value("${baseUrl}")
     private String baseUrl;
     private final UrlValidator urlValidator;
@@ -56,7 +57,7 @@ public class UrlController {
             }
             UrlPair urlPair = convertToUrlPair(longUrlDTO);
             ShortUrlDTO shortUrlDTO = urlPairService.createShortUrl(urlPair);
-            return ResponseEntity.ok(shortUrlDTO);
+            return new ResponseEntity<>(shortUrlDTO, HttpStatus.CREATED);
         }
         log.error("Too many requests!");
         throw new TooManyRequestsException("Too many requests!");

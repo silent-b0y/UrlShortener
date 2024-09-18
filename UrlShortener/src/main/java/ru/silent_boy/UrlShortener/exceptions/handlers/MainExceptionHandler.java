@@ -29,7 +29,7 @@ public class MainExceptionHandler {
                 e.getMessage(),
                 LocalDateTime.now()
         );
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(UrlExpiredException.class)
@@ -38,7 +38,7 @@ public class MainExceptionHandler {
                 e.getMessage(),
                 LocalDateTime.now()
         );
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.GONE);
     }
 
     @ExceptionHandler(TooManyRequestsException.class)
@@ -47,7 +47,7 @@ public class MainExceptionHandler {
                 e.getMessage(),
                 LocalDateTime.now()
         );
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.TOO_MANY_REQUESTS);
     }
 
     @ExceptionHandler(Exception.class)
