@@ -1,8 +1,6 @@
 package ru.silent_boy.UrlShortener.controllers;
 
-import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
-import io.github.bucket4j.Refill;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -21,8 +19,6 @@ import ru.silent_boy.UrlShortener.models.UrlPair;
 import ru.silent_boy.UrlShortener.services.UrlPairService;
 import ru.silent_boy.UrlShortener.util.UrlValidator;
 
-import java.time.Duration;
-
 import static ru.silent_boy.UrlShortener.util.ErrorsUtil.returnErrorsMessage;
 
 @Slf4j
@@ -36,13 +32,11 @@ public class UrlController implements IUrlController {
     private final Bucket bucket;
 
     @Autowired
-    public UrlController(UrlPairService urlPairService, UrlValidator urlValidator, ModelMapper modelMapper) {
+    public UrlController(UrlPairService urlPairService, UrlValidator urlValidator, ModelMapper modelMapper, Bucket bucket) {
         this.urlPairService = urlPairService;
         this.urlValidator = urlValidator;
         this.modelMapper = modelMapper;
-        this.bucket = Bucket.builder()
-                .addLimit(Bandwidth.classic(100, Refill.greedy(100, Duration.ofMinutes(1))))
-                .build();
+        this.bucket = bucket;
     }
 
     @PostMapping("/create")
