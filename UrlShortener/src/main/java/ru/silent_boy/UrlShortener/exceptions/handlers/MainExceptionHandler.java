@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.silent_boy.UrlShortener.exceptions.InvalidUrlException;
+import ru.silent_boy.UrlShortener.exceptions.TooManyRequestsException;
 import ru.silent_boy.UrlShortener.exceptions.UrlExpiredException;
 import ru.silent_boy.UrlShortener.exceptions.UrlNotFoundException;
 
@@ -33,6 +34,15 @@ public class MainExceptionHandler {
 
     @ExceptionHandler(UrlExpiredException.class)
     public ResponseEntity<ErrorResponse> handleException(UrlExpiredException e) {
+        ErrorResponse response = new ErrorResponse(
+                e.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(TooManyRequestsException.class)
+    public ResponseEntity<ErrorResponse> handleException(TooManyRequestsException e) {
         ErrorResponse response = new ErrorResponse(
                 e.getMessage(),
                 LocalDateTime.now()

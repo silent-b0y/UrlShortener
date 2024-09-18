@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +15,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import ru.silent_boy.UrlShortener.dto.LongUrlDTO;
 import ru.silent_boy.UrlShortener.dto.ShortUrlDTO;
 import ru.silent_boy.UrlShortener.exceptions.InvalidUrlException;
+import ru.silent_boy.UrlShortener.exceptions.TooManyRequestsException;
 import ru.silent_boy.UrlShortener.models.UrlPair;
 import ru.silent_boy.UrlShortener.services.UrlPairService;
 import ru.silent_boy.UrlShortener.util.UrlValidator;
@@ -58,7 +58,8 @@ public class UrlController {
             ShortUrlDTO shortUrlDTO = urlPairService.createShortUrl(urlPair);
             return ResponseEntity.ok(shortUrlDTO);
         }
-        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
+        log.error("Too many requests!");
+        throw new TooManyRequestsException("Too many requests!");
     }
 
     @GetMapping("/longUrl")
